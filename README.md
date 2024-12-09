@@ -1,4 +1,4 @@
-# 2425 PROGRAMACION ORIENTADA A OBJETOS (A) Amir Puente
+# 2425 PROGRAMACION ORIENTADA A OBJETOS (A) AMIR PUENTE
 
 ## Introducción
 Este repositorio contiene materiales y ejemplos relacionados con la asignatura de Programación Orientada a Objetos. Está diseñado para apoyar el aprendizaje práctico de conceptos como clases y objetos en Python.
