@@ -1,16 +1,20 @@
-# Función para ingresar las temperaturas diarias
+# "Universidad Estatal Amazonica"
+# Clase: POO Paralelo A
+# Nombre: Amir Puente
+#Aqui defino la función para temperaturas
+#Para los siete dias de la semana
 def ingresar_temperaturas():
     temperaturas = []
     for i in range(7):
-        temp = float(input(f"Ingrese la temperatura del día {i + 1}: "))
+        temp = float(input(f"Digita la temperatura del día {i + 1}: "))
         temperaturas.append(temp)
     return temperaturas
 
-# Función para calcular el promedio semanal
+#Aqui va el calculo del promedio
 def calcular_promedio(temperaturas):
     return sum(temperaturas) / len(temperaturas)
 
-# Programa principal
+#Finalmente enseño el programa
 def main():
     temperaturas = ingresar_temperaturas()
     promedio = calcular_promedio(temperaturas)
