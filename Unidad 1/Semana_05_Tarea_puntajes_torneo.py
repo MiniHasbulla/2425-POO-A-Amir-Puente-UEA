@@ -1,7 +1,7 @@
-# "Universidad Estatal Amazonica"
-# Clase: POO Paralelo A
-# Nombre: Amir Puente
-# Fecha:11/01/2025
+#"Universidad Estatal Amazonica"
+#Clase: POO Paralelo A
+#Nombre: Amir Puente
+#Fecha:11/01/2025
 
 #Para dar cumplimiento al deber solicitado decidi crear un programa
 #que gestione las puntuaciones de un torneo de videojuegos.
