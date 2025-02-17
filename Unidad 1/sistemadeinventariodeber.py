@@ -38,7 +38,7 @@ class Inventario:
         self.productos =[]
 
 #Agrego los productos, si este producto ya esta registrado no se puede volver a agregar
-    def añadir_producto(self, producto):
+    def anadir_producto(self, producto):
         for p in self.productos:
             if p.get_id() == producto.get_id():
                 print("El numero del producto se encuentra duplicado, no se puede añadir.")
@@ -110,7 +110,7 @@ def menu():
             cantidad= int(input("Digita la cantidad del producto: "))
             precio= float(input("Escribe el precio del producto: "))
             producto= Producto(id, nombre, cantidad, precio)
-            inventario.añadir_producto(producto)
+            inventario.anadir_producto(producto)
         elif eleccion == '2':
             id = input("Digita el numero del producto que deseas eliminar: ")
             inventario.eliminar_producto(id)
