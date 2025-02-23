@@ -5,6 +5,7 @@
 
 #Defino la clase producto con sus respectivas caracteristicas
 #Siguiendo lo pedido en el enunciado
+import os
 class Producto:
     def __init__(self, id, nombre, cantidad, precio):
         self.id =id
@@ -12,125 +13,138 @@ class Producto:
         self.cantidad =cantidad
         self.precio =precio
 
-#Coloco set/get de cada uno
-    def get_id(self):
-        return self.id
+    def __str__(self):
+        return f"{self.id},{self.nombre},{self.cantidad},{self.precio}"
 
-    def get_nombre(self):
-        return self.nombre
+    @staticmethod
+    def from_string(line):
+        id, nombre, cantidad, precio = line.strip().split(',')
+        return Producto(id, nombre, int(cantidad), float(precio))
 
-    def get_cantidad(self):
-        return self.cantidad
-
-    def set_cantidad(self, cantidad):
-        self.cantidad =cantidad
-
-    def get_precio(self):
-        return self.precio
-
-    def set_precio(self, precio):
-        self.precio =precio
-#Ahora continuo con la clase "Inventario"
-#En esta añado los productos que se colocaran
-#Asi mismo coloco ciertas restricciones logicas para el registro de los productos
 class Inventario:
+    ARCHIVO = "inventario.txt"
+
     def __init__(self):
-        self.productos =[]
+        self.productos = []
+        self.cargar_desde_archivo()
 
-#Agrego los productos, si este producto ya esta registrado no se puede volver a agregar
+    def guardar_en_archivo(self):
+        try:
+            with open(self.ARCHIVO, "w") as f:
+                for producto in self.productos:
+                    f.write(str(producto) + "\n")
+        except Exception as e:
+            print(f"Error al guardar el inventario: {e}")
+
+    def cargar_desde_archivo(self):
+        if not os.path.exists(self.ARCHIVO):
+            return
+        try:
+            with open(self.ARCHIVO, "r") as f:
+                self.productos = [Producto.from_string(line) for line in f]
+        except Exception as e:
+            print(f"Error al cargar el inventario: {e}")
+
     def anadir_producto(self, producto):
-        for p in self.productos:
-            if p.get_id() == producto.get_id():
-                print("El numero del producto se encuentra duplicado, no se puede añadir.")
-                return
+        if any(p.id == producto.id for p in self.productos):
+            print("El número del producto ya existe por ello no se puede añadir")
+            return
         self.productos.append(producto)
-        print(f"El producto '{producto.get_nombre()}' ha sido añadido satisfactoriamente")
+        self.guardar_en_archivo()
+        print(f"El producto '{producto.nombre}' se añadio correctamente.")
 
-#Ahora defino la funcion de eliminar un producto previamente registrado
     def eliminar_producto(self, id):
         for producto in self.productos:
-            if producto.get_id() == id:
+            if producto.id == id:
                 self.productos.remove(producto)
-                print(f"El producto con numero '{id}' ha sido eliminado")
+                self.guardar_en_archivo()
+                print(f"El producto '{id}' se elimino")
                 return
-        print(f"El producto con numero '{id}' no se ha localizado")
+        print(f"No se encontró el producto '{id}'")
 
-#En este caso coloco la funcion requerida para modificar un producto ya registrado
     def actualizar_producto(self, id, cantidad=None, precio=None):
         for producto in self.productos:
-            if producto.get_id() == id:
+            if producto.id == id:
                 if cantidad is not None:
-                    producto.set_cantidad(cantidad)
+                    producto.cantidad = cantidad
                 if precio is not None:
-                    producto.set_precio(precio)
-                print(f"El producto '{id}' fue modificado")
+                    producto.precio = precio
+                self.guardar_en_archivo()
+                print(f"El producto '{id}' fue actualizado")
                 return
-        print(f"El producto numero '{id}' no pudo ser encontrado")
+        print(f"No se encontró el producto '{id}'")
 
-#Ahora coloco la funcion que me permitira buscar los productos en el inventario
     def buscar_producto(self, nombre):
-        resultados = [p for p in self.productos if nombre.lower() in p.get_nombre().lower()]
+        resultados = [p for p in self.productos if nombre.lower() in p.nombre.lower()]
         if resultados:
-            print("Productos encontrados:")
+            print("Productos:")
             for p in resultados:
-                print(f"Numero: {p.get_id()}, Nombre: {p.get_nombre()}, Cantidad: {p.get_cantidad()}, Precio: {p.get_precio()}")
+                print(f"Número: {p.id}, Nombre: {p.nombre}, Cantidad: {p.cantidad}, Precio: {p.precio}")
         else:
             print("No se han encontraron productos con este nombre")
 
-#Indicar/verificar los productos
     def mostrar_productos(self):
         if not self.productos:
-            print("No se han registrado productos en el inventario")
+            print("No existen productos en el inventario")
         else:
-            print("Inventario de productos:")
+            print("Inventario:")
             for p in self.productos:
-                print(f"Numero: {p.get_id()}, Nombre: {p.get_nombre()}, Cantidad: {p.get_cantidad()}, Precio: {p.get_precio()}")
+                print(f"Número: {p.id}, Nombre: {p.nombre}, Cantidad: {p.cantidad}, Precio: {p.precio}")
 
-#Una vez cimentado las bases de la funcionalidad del sistema continuo con el menu
 def menu():
     inventario = Inventario()
     opciones = {
-        '1': "Agrega un nuevo producto",
-        '2': "Elimina un producto mediante su numero",
-        '3': "Actualiza la cantidad o precio de un producto por su numero",
+        '1': "Agregar productos",
+        '2': "Eliminar productos por número",
+        '3': "Actualizar cantidad o precio de un producto",
         '4': "Buscar productos por nombre",
-        '5': "Mostrar todos los productos en el inventario",
+        '5': "Mostrar todos los productos",
         '6': "Salir"
     }
+
     while True:
-        print("\n¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥")
-        print("Bienvenid@ al Gestor3000")
-        print("¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥")
+        print("\n¥¥¥¥¥¥¥¥¥¥ El SuperGestor3000 ¥¥¥¥¥¥¥¥¥¥")
         for clave, valor in opciones.items():
             print(f"{clave}. {valor}")
-        eleccion = input("Para continuar escoge una opción: ")
+        eleccion = input("Selecciona: ")
+
         if eleccion == '1':
-            id= input("Digita el numero del producto: ")
-            nombre= input("Escribe el nombre del producto: ")
-            cantidad= int(input("Digita la cantidad del producto: "))
-            precio= float(input("Escribe el precio del producto: "))
-            producto= Producto(id, nombre, cantidad, precio)
-            inventario.anadir_producto(producto)
+            id = input("Número: ")
+            nombre = input("Nombre: ")
+            try:
+                cantidad = int(input("Cantidad: "))
+                precio = float(input("Precio: "))
+                inventario.anadir_producto(Producto(id, nombre, cantidad, precio))
+            except ValueError:
+                print("Error: Por favor digita valores válidos")
+
         elif eleccion == '2':
-            id = input("Digita el numero del producto que deseas eliminar: ")
+            id = input("Número del producto para eliminar: ")
             inventario.eliminar_producto(id)
+
         elif eleccion == '3':
-            id = input("Escribe el numero del producto para actualizar: ")
-            cantidad = input("Introduce la nueva cantidad (deja en blanco si no deseas cambiarla): ")
-            precio = input("Redacta el nuevo precio (deja en blanco si no deseas cambiarlo): ")
-            cantidad = int(cantidad) if cantidad else None
-            precio = float(precio) if precio else None
-            inventario.actualizar_producto(id, cantidad, precio)
+            id = input("Número del producto para actualizarlo: ")
+            cantidad = input("Nueva cantidad (si no cambia dejar en blanco): ")
+            precio = input("Nuevo precio (si no cambia dejar en blanco): ")
+            try:
+                cantidad = int(cantidad) if cantidad else None
+                precio = float(precio) if precio else None
+                inventario.actualizar_producto(id, cantidad, precio)
+            except ValueError:
+                print("Error, debes digitar numeros válidos")
+
         elif eleccion == '4':
-            nombre = input("Digita el nombre del producto que buscas: ")
+            nombre = input("Nombre del producto para buscar: ")
             inventario.buscar_producto(nombre)
+
         elif eleccion == '5':
             inventario.mostrar_productos()
+
         elif eleccion == '6':
-            print("Saliendo del Gestor3000...........")
+            print("Saliendo del SuperGestor3000.........")
             break
         else:
-            print("La opción que digitaste no es válida. Selecciona una opción del menú")
+            print("Opción no válida, intenta de nuevo.")
 
 if __name__ == "__main__":
     menu()
